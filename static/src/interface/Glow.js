@@ -26,6 +26,10 @@ class Glow {
 		this._aiGlow = document.createElement('div')
 		this._aiGlow.id = 'ai'
 		this._element.appendChild(this._aiGlow)
+		this._mozartImg = document.createElement('img')
+		this._mozartImg.id = 'mozart-img'
+		this._mozartImg.src = '../images/Mozart_Playing_Loop.gif'
+		this._aiGlow.appendChild(this._mozartImg)
 
 		this._userGlow = document.createElement('div')
 		this._userGlow.id = 'user'
@@ -48,9 +52,16 @@ class Glow {
 			}
 		} else {
 			if (!this._aiVisible){
+				var l = ((Math.random()*800)).toFixed();
+				var t = ((Math.random()*300)).toFixed();
+				this._mozartImg.style.cssText = "margin-left:"+ l + "px; margin-top: "+ t +"px;"
 				this._aiVisible = true
 				this._aiGlow.classList.add('visible')
 				this._userGlow.classList.remove('visible')
+				var that = this;
+				setTimeout(function() {
+                that._mozartImg.src = '../images/Mozart_Playing_Loop.gif';
+            }, 0);
 			}
 		}
 	}
