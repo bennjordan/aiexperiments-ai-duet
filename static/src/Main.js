@@ -21,9 +21,11 @@ import {Glow} from 'interface/Glow'
 import {Splash} from 'interface/Splash'
 import {About} from 'interface/About'
 import {Tutorial} from 'ai/Tutorial'
+import WebMidi from 'webmidi'
+import Tone from 'Tone/core/Tone'
 import 'babel-polyfill'
 
-/////////////// SPLASH ///////////////////	
+/////////////// SPLASH ///////////////////
 
 const about = new About(document.body)
 const splash = new Splash(document.body)
@@ -75,19 +77,38 @@ keyboard.on('keyUp', (note) => {
 })
 
 /////////////// AI ///////////////////
-
+const useMidi = true
 const ai = new AI()
+var output;
+if (useMidi) {
+        WebMidi.enable((err) => {
+          if (!err){
+            if (WebMidi.outputs)
+              output = WebMidi.getOutputByName("UM-1")
+          }
+        })
+}
 
 ai.on('keyDown', (note, time) => {
-	sound.keyDown(note, time, true)
-	keyboard.keyDown(note, time, true)
-	glow.ai(time)
+        var t = (time - Tone.now()) * 1000
+        console.log("key down time" + t)
+        if (output)
+          output.playNote(note, "all", {"time": "+"+t})
+        else
+           sound.keyDown(note, time, true)
+        keyboard.keyDown(note, time, true)
+        glow.ai(time)
 })
 
 ai.on('keyUp', (note, time) => {
-	sound.keyUp(note, time, true)
-	keyboard.keyUp(note, time, true)	
-	glow.ai(time)
+        var t = (time - Tone.now()) * 1000
+        console.log("key up time" + t)
+        if (output)
+          output.stopNote(note, "all", {"time": "+"+t})
+        else
+          sound.keyUp(note, time, true)
+        keyboard.keyUp(note, time, true)
+        glow.ai(time)
 })
 
 /////////////// TUTORIAL ///////////////////
