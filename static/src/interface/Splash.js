@@ -34,7 +34,7 @@ class Splash extends events.EventEmitter{
 
 		const title = document.createElement('div')
 		title.id = 'title'
-		title.textContent = 'A.I. Duet'
+		title.textContent = 'W.A.I. Mozart'
 		titleContainer.appendChild(title)
 
 		const subTitle = document.createElement('div')
