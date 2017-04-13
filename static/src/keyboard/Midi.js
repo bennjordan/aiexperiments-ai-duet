@@ -25,6 +25,8 @@ class Midi extends events.EventEmitter{
 
 		WebMidi.enable((err) => {
 			if (!err){
+				console.log(WebMidi.inputs)
+				console.log(WebMidi.outputs)
 				this._isEnabled = true
 				if (WebMidi.inputs){
 					WebMidi.inputs.forEach((input) => this._bindInput(input))
@@ -39,6 +41,12 @@ class Midi extends events.EventEmitter{
 	}
 
 	_bindInput(inputDevice){
+		if (inputDevice)
+			console.log(inputDevice.name)
+		if (inputDevice && inputDevice.name.indexOf("IAC") !== -1) {
+			console.log("Do not bind " + inputDevice.name)
+			return
+		}
 		if (this._isEnabled){
 			WebMidi.addListener('disconnected', (device) => {
 				if (device.input){
